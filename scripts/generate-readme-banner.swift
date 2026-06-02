@@ -60,7 +60,7 @@ private func drawIcon(in rect: NSRect) {
 }
 
 private func drawMockPanel(in rect: NSRect) {
-    let panelPath = roundedRect(rect, radius: 34)
+    let panelPath = roundedRect(rect, radius: 38)
 
     NSGraphicsContext.saveGraphicsState()
     let shadow = NSShadow()
@@ -68,7 +68,7 @@ private func drawMockPanel(in rect: NSRect) {
     shadow.shadowBlurRadius = 34
     shadow.shadowOffset = NSSize(width: 0, height: -16)
     shadow.set()
-    NSColor(calibratedRed: 0.90, green: 0.96, blue: 1.00, alpha: 0.92).setFill()
+    NSColor(calibratedRed: 0.92, green: 0.97, blue: 1.00, alpha: 0.95).setFill()
     panelPath.fill()
     NSGraphicsContext.restoreGraphicsState()
 
@@ -81,50 +81,47 @@ private func drawMockPanel(in rect: NSRect) {
     let softLine = NSColor(calibratedRed: 0.55, green: 0.72, blue: 0.88, alpha: 0.42)
 
     accent.setFill()
-    NSBezierPath(ovalIn: NSRect(x: rect.minX + 58, y: rect.maxY - 94, width: 28, height: 28)).fill()
+    NSBezierPath(ovalIn: NSRect(x: rect.minX + 64, y: rect.maxY - 102, width: 30, height: 30)).fill()
 
     drawText(
         "运行中",
-        in: NSRect(x: rect.minX + 112, y: rect.maxY - 108, width: 180, height: 42),
-        font: .systemFont(ofSize: 31, weight: .semibold),
+        in: NSRect(x: rect.minX + 118, y: rect.maxY - 113, width: 180, height: 42),
+        font: .systemFont(ofSize: 32, weight: .semibold),
         color: NSColor(calibratedRed: 0.18, green: 0.23, blue: 0.29, alpha: 0.86)
     )
 
     drawText(
         "Codex 正在工作",
-        in: NSRect(x: rect.minX + 58, y: rect.maxY - 182, width: rect.width - 116, height: 52),
-        font: .systemFont(ofSize: 37, weight: .bold),
+        in: NSRect(x: rect.minX + 64, y: rect.maxY - 194, width: rect.width - 128, height: 58),
+        font: .systemFont(ofSize: 40, weight: .bold),
         color: NSColor(calibratedRed: 0.16, green: 0.20, blue: 0.26, alpha: 0.92)
     )
 
     drawText(
         "检测到任务活动",
-        in: NSRect(x: rect.minX + 58, y: rect.maxY - 236, width: rect.width - 116, height: 40),
-        font: .systemFont(ofSize: 27, weight: .medium),
+        in: NSRect(x: rect.minX + 64, y: rect.maxY - 252, width: rect.width - 128, height: 40),
+        font: .systemFont(ofSize: 28, weight: .medium),
         color: muted
     )
 
     softLine.setFill()
-    roundedRect(NSRect(x: rect.minX + 58, y: rect.maxY - 282, width: rect.width - 116, height: 14), radius: 7).fill()
+    roundedRect(NSRect(x: rect.minX + 64, y: rect.minY + 86, width: rect.width - 128, height: 14), radius: 7).fill()
     accent.withAlphaComponent(0.70).setFill()
-    roundedRect(NSRect(x: rect.minX + 58, y: rect.maxY - 282, width: (rect.width - 116) * 0.46, height: 14), radius: 7).fill()
+    roundedRect(NSRect(x: rect.minX + 64, y: rect.minY + 86, width: (rect.width - 128) * 0.46, height: 14), radius: 7).fill()
+}
 
-    let projectRect = NSRect(x: rect.minX + 58, y: rect.minY + 30, width: rect.width - 270, height: 48)
-    NSColor(calibratedWhite: 1.0, alpha: 0.46).setFill()
-    roundedRect(projectRect, radius: 18).fill()
-    drawText(
-        "codex桌面小窗 · xStatus for Codex",
-        in: NSRect(x: projectRect.minX + 24, y: projectRect.minY + 10, width: projectRect.width - 48, height: 30),
-        font: .systemFont(ofSize: 22, weight: .medium),
-        color: muted
-    )
+private func drawStatusChip(_ text: String, dotColor: NSColor, in rect: NSRect) {
+    NSColor(calibratedWhite: 1.0, alpha: 0.58).setFill()
+    roundedRect(rect, radius: rect.height / 2).fill()
+
+    dotColor.setFill()
+    NSBezierPath(ovalIn: NSRect(x: rect.minX + 20, y: rect.midY - 6, width: 12, height: 12)).fill()
 
     drawText(
-        "刚刚更新",
-        in: NSRect(x: rect.maxX - 190, y: rect.minY + 38, width: 132, height: 30),
-        font: .systemFont(ofSize: 21, weight: .medium),
-        color: muted,
-        alignment: .right
+        text,
+        in: NSRect(x: rect.minX + 44, y: rect.minY + 11, width: rect.width - 58, height: 24),
+        font: .systemFont(ofSize: 18, weight: .semibold),
+        color: NSColor(calibratedRed: 0.24, green: 0.34, blue: 0.46, alpha: 0.82)
     )
 }
 
@@ -135,31 +132,47 @@ defer { NSGraphicsContext.restoreGraphicsState() }
 
 let canvas = NSRect(x: 0, y: 0, width: width, height: height)
 let background = NSGradient(colors: [
-    NSColor(calibratedRed: 0.95, green: 0.98, blue: 1.00, alpha: 1.0),
-    NSColor(calibratedRed: 0.82, green: 0.92, blue: 1.00, alpha: 1.0),
-    NSColor(calibratedRed: 0.97, green: 0.98, blue: 1.00, alpha: 1.0),
+    NSColor(calibratedRed: 0.98, green: 1.00, blue: 1.00, alpha: 1.0),
+    NSColor(calibratedRed: 0.84, green: 0.93, blue: 1.00, alpha: 1.0),
+    NSColor(calibratedRed: 0.91, green: 0.97, blue: 1.00, alpha: 1.0),
 ])!
 background.draw(in: canvas, angle: -24)
 
-NSColor(calibratedWhite: 1.0, alpha: 0.35).setFill()
-roundedRect(NSRect(x: 60, y: 58, width: 1480, height: 604), radius: 46).fill()
+NSColor(calibratedWhite: 1.0, alpha: 0.42).setFill()
+roundedRect(NSRect(x: 70, y: 64, width: 1460, height: 592), radius: 52).fill()
 
-drawIcon(in: NSRect(x: 158, y: 252, width: 216, height: 216))
+drawIcon(in: NSRect(x: 158, y: 382, width: 180, height: 180))
 
 drawText(
     "xStatus for Codex",
-    in: NSRect(x: 142, y: 196, width: 520, height: 62),
-    font: .systemFont(ofSize: 52, weight: .bold),
+    in: NSRect(x: 150, y: 312, width: 560, height: 70),
+    font: .systemFont(ofSize: 58, weight: .bold),
     color: NSColor(calibratedRed: 0.14, green: 0.22, blue: 0.34, alpha: 0.95)
 )
 drawText(
     "A lightweight macOS status widget for Codex.",
-    in: NSRect(x: 146, y: 154, width: 560, height: 34),
-    font: .systemFont(ofSize: 24, weight: .medium),
+    in: NSRect(x: 154, y: 266, width: 570, height: 34),
+    font: .systemFont(ofSize: 25, weight: .medium),
     color: NSColor(calibratedRed: 0.36, green: 0.48, blue: 0.60, alpha: 0.88)
 )
 
-drawMockPanel(in: NSRect(x: 712, y: 178, width: 710, height: 364))
+drawStatusChip(
+    "Running",
+    dotColor: NSColor(calibratedRed: 0.13, green: 0.47, blue: 1.00, alpha: 1),
+    in: NSRect(x: 154, y: 184, width: 146, height: 46)
+)
+drawStatusChip(
+    "Waiting",
+    dotColor: NSColor(calibratedRed: 0.72, green: 0.50, blue: 1.00, alpha: 1),
+    in: NSRect(x: 318, y: 184, width: 144, height: 46)
+)
+drawStatusChip(
+    "Done",
+    dotColor: NSColor(calibratedRed: 0.16, green: 0.68, blue: 0.40, alpha: 1),
+    in: NSRect(x: 480, y: 184, width: 116, height: 46)
+)
+
+drawMockPanel(in: NSRect(x: 790, y: 170, width: 660, height: 390))
 
 guard let png = bitmap.representation(using: .png, properties: [:]) else {
     throw NSError(domain: "BannerGeneration", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unable to encode PNG"])
