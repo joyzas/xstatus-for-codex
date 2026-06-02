@@ -174,6 +174,7 @@ xStatus for Codex 只在本机运行，不上传数据。
 Sources/CodexStatusWidget/      macOS 应用源码
 Resources/AppIcon.icns          应用图标
 scripts/build-app.sh            构建应用包
+scripts/generate-app-icon.swift  生成应用图标
 scripts/run-app.sh              本地构建并运行
 scripts/install-codex-companion.sh
 scripts/uninstall-codex-companion.sh
