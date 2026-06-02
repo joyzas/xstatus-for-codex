@@ -4,6 +4,8 @@ xStatus for Codex 是一个轻量的 macOS 菜单栏应用，用来在桌面上�
 
 它会在 Codex 状态变化时弹出一个小浮窗，显示任务是否正在运行、等待确认、已完成、失败或空闲。浮窗 5 秒后自动隐藏；如果你正在使用全屏应用，它不会主动弹出来打扰你。
 
+![xStatus for Codex banner](Resources/READMEBanner.png)
+
 ## 功能
 
 - 菜单栏常驻显示 Codex 当前状态。
@@ -173,8 +175,10 @@ xStatus for Codex 只在本机运行，不上传数据。
 ```text
 Sources/CodexStatusWidget/      macOS 应用源码
 Resources/AppIcon.icns          应用图标
+Resources/READMEBanner.png      README 横幅
 scripts/build-app.sh            构建应用包
 scripts/generate-app-icon.swift  生成应用图标
+scripts/generate-readme-banner.swift
 scripts/run-app.sh              本地构建并运行
 scripts/install-codex-companion.sh
 scripts/uninstall-codex-companion.sh
