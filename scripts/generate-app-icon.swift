@@ -26,24 +26,29 @@ private func roundedRect(_ rect: NSRect, radius: CGFloat) -> NSBezierPath {
     NSBezierPath(roundedRect: rect, xRadius: radius, yRadius: radius)
 }
 
-private func drawIcon(size: Int) throws -> Data {
-    let dimension = CGFloat(size)
-    let scale = dimension / 1024.0
+private func makeBitmap(width: Int, height: Int) throws -> NSBitmapImageRep {
     guard let bitmap = NSBitmapImageRep(
         bitmapDataPlanes: nil,
-        pixelsWide: size,
-        pixelsHigh: size,
+        pixelsWide: width,
+        pixelsHigh: height,
         bitsPerSample: 8,
         samplesPerPixel: 4,
         hasAlpha: true,
         isPlanar: false,
         colorSpaceName: .deviceRGB,
-        bitmapFormat: [],
+        bitmapFormat: [.alphaFirst],
         bytesPerRow: 0,
         bitsPerPixel: 0
     ) else {
         throw NSError(domain: "IconGeneration", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unable to create bitmap"])
     }
+    return bitmap
+}
+
+private func drawIcon(size: Int) throws -> Data {
+    let dimension = CGFloat(size)
+    let scale = dimension / 1024.0
+    let bitmap = try makeBitmap(width: size, height: size)
 
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
@@ -54,101 +59,108 @@ private func drawIcon(size: Int) throws -> Data {
     NSGraphicsContext.current?.imageInterpolation = .high
 
     let outerRect = NSRect(
-        x: point(118, scale),
-        y: point(98, scale),
-        width: point(788, scale),
-        height: point(828, scale)
+        x: point(26, scale),
+        y: point(26, scale),
+        width: point(972, scale),
+        height: point(972, scale)
     )
-    let outerPath = roundedRect(outerRect, radius: point(148, scale))
+    let outerPath = roundedRect(outerRect, radius: point(198, scale))
 
     NSGraphicsContext.saveGraphicsState()
     let outerShadow = NSShadow()
-    outerShadow.shadowColor = NSColor(calibratedRed: 0.40, green: 0.62, blue: 0.90, alpha: 0.22)
-    outerShadow.shadowBlurRadius = point(34, scale)
-    outerShadow.shadowOffset = NSSize(width: 0, height: -point(10, scale))
+    outerShadow.shadowColor = NSColor(calibratedRed: 0.30, green: 0.56, blue: 0.86, alpha: 0.20)
+    outerShadow.shadowBlurRadius = point(26, scale)
+    outerShadow.shadowOffset = NSSize(width: 0, height: -point(8, scale))
     outerShadow.set()
 
     let outerGradient = NSGradient(colors: [
-        NSColor(calibratedRed: 0.96, green: 0.99, blue: 1.00, alpha: 1.00),
-        NSColor(calibratedRed: 0.73, green: 0.88, blue: 1.00, alpha: 1.00),
-        NSColor(calibratedRed: 0.56, green: 0.76, blue: 0.96, alpha: 1.00),
+        NSColor(calibratedRed: 0.98, green: 1.00, blue: 1.00, alpha: 1.00),
+        NSColor(calibratedRed: 0.74, green: 0.89, blue: 1.00, alpha: 1.00),
+        NSColor(calibratedRed: 0.48, green: 0.74, blue: 0.98, alpha: 1.00),
     ])!
-    outerGradient.draw(in: outerPath, angle: -35)
+    outerGradient.draw(in: outerPath, angle: -38)
     NSGraphicsContext.restoreGraphicsState()
 
-    NSColor(calibratedWhite: 1.0, alpha: 0.88).setStroke()
-    outerPath.lineWidth = max(1.0, point(8, scale))
+    NSColor(calibratedWhite: 1.0, alpha: 0.92).setStroke()
+    outerPath.lineWidth = max(1.0, point(7, scale))
     outerPath.stroke()
 
-    let innerRect = NSRect(
-        x: point(230, scale),
-        y: point(306, scale),
-        width: point(564, scale),
-        height: point(340, scale)
+    let glowPath = roundedRect(
+        NSRect(x: point(70, scale), y: point(74, scale), width: point(884, scale), height: point(884, scale)),
+        radius: point(166, scale)
     )
-    let innerPath = roundedRect(innerRect, radius: point(72, scale))
+    NSColor(calibratedWhite: 1.0, alpha: 0.18).setStroke()
+    glowPath.lineWidth = max(1.0, point(20, scale))
+    glowPath.stroke()
+
+    let cardRect = NSRect(
+        x: point(170, scale),
+        y: point(304, scale),
+        width: point(684, scale),
+        height: point(402, scale)
+    )
+    let cardPath = roundedRect(cardRect, radius: point(86, scale))
 
     NSGraphicsContext.saveGraphicsState()
     let cardShadow = NSShadow()
-    cardShadow.shadowColor = NSColor(calibratedRed: 0.36, green: 0.58, blue: 0.82, alpha: 0.24)
-    cardShadow.shadowBlurRadius = point(28, scale)
-    cardShadow.shadowOffset = NSSize(width: 0, height: -point(8, scale))
+    cardShadow.shadowColor = NSColor(calibratedRed: 0.28, green: 0.52, blue: 0.78, alpha: 0.28)
+    cardShadow.shadowBlurRadius = point(30, scale)
+    cardShadow.shadowOffset = NSSize(width: 0, height: -point(10, scale))
     cardShadow.set()
 
     let cardGradient = NSGradient(colors: [
-        NSColor(calibratedRed: 0.98, green: 1.00, blue: 1.00, alpha: 0.95),
-        NSColor(calibratedRed: 0.83, green: 0.94, blue: 1.00, alpha: 0.92),
+        NSColor(calibratedRed: 0.99, green: 1.00, blue: 1.00, alpha: 0.96),
+        NSColor(calibratedRed: 0.84, green: 0.94, blue: 1.00, alpha: 0.92),
     ])!
-    cardGradient.draw(in: innerPath, angle: -18)
+    cardGradient.draw(in: cardPath, angle: -20)
     NSGraphicsContext.restoreGraphicsState()
 
-    NSColor(calibratedWhite: 1.0, alpha: 0.82).setStroke()
-    innerPath.lineWidth = max(1.0, point(5, scale))
-    innerPath.stroke()
+    NSColor(calibratedWhite: 1.0, alpha: 0.84).setStroke()
+    cardPath.lineWidth = max(1.0, point(6, scale))
+    cardPath.stroke()
 
     let dotRect = NSRect(
-        x: point(284, scale),
-        y: point(470, scale),
-        width: point(62, scale),
-        height: point(62, scale)
+        x: point(258, scale),
+        y: point(510, scale),
+        width: point(76, scale),
+        height: point(76, scale)
     )
     NSGraphicsContext.saveGraphicsState()
     let dotShadow = NSShadow()
-    dotShadow.shadowColor = NSColor(calibratedRed: 0.12, green: 0.45, blue: 1.0, alpha: 0.38)
-    dotShadow.shadowBlurRadius = point(16, scale)
+    dotShadow.shadowColor = NSColor(calibratedRed: 0.08, green: 0.42, blue: 1.0, alpha: 0.38)
+    dotShadow.shadowBlurRadius = point(18, scale)
     dotShadow.shadowOffset = .zero
     dotShadow.set()
     NSColor(calibratedRed: 0.10, green: 0.43, blue: 1.00, alpha: 1.00).setFill()
     NSBezierPath(ovalIn: dotRect).fill()
     NSGraphicsContext.restoreGraphicsState()
 
-    let lineColor = NSColor(calibratedRed: 0.46, green: 0.63, blue: 0.82, alpha: 0.72)
+    let lineColor = NSColor(calibratedRed: 0.45, green: 0.62, blue: 0.80, alpha: 0.74)
     lineColor.setFill()
     roundedRect(
-        NSRect(x: point(398, scale), y: point(500, scale), width: point(310, scale), height: point(34, scale)),
+        NSRect(x: point(414, scale), y: point(544, scale), width: point(340, scale), height: point(40, scale)),
+        radius: point(20, scale)
+    ).fill()
+    roundedRect(
+        NSRect(x: point(414, scale), y: point(482, scale), width: point(220, scale), height: point(34, scale)),
         radius: point(17, scale)
     ).fill()
-    roundedRect(
-        NSRect(x: point(398, scale), y: point(452, scale), width: point(196, scale), height: point(30, scale)),
-        radius: point(15, scale)
-    ).fill()
 
-    NSColor(calibratedRed: 0.61, green: 0.76, blue: 0.92, alpha: 0.38).setFill()
+    NSColor(calibratedRed: 0.62, green: 0.78, blue: 0.94, alpha: 0.40).setFill()
     roundedRect(
-        NSRect(x: point(290, scale), y: point(370, scale), width: point(456, scale), height: point(30, scale)),
-        radius: point(15, scale)
+        NSRect(x: point(245, scale), y: point(376, scale), width: point(596, scale), height: point(36, scale)),
+        radius: point(18, scale)
     ).fill()
 
     NSColor(calibratedRed: 0.13, green: 0.47, blue: 1.00, alpha: 0.88).setFill()
     roundedRect(
-        NSRect(x: point(290, scale), y: point(370, scale), width: point(270, scale), height: point(30, scale)),
-        radius: point(15, scale)
+        NSRect(x: point(245, scale), y: point(376, scale), width: point(372, scale), height: point(36, scale)),
+        radius: point(18, scale)
     ).fill()
 
     guard let png = bitmap.representation(using: .png, properties: [:]) else {
-        throw NSError(domain: "IconGeneration", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unable to create PNG data"])
+        throw NSError(domain: "IconGeneration", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unable to encode PNG"])
     }
-
     return png
 }
 
