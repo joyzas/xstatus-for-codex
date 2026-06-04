@@ -32,6 +32,8 @@ xStatus for Codex 是一个轻量的 macOS 菜单栏应用，用来在桌面上�
 | `failed` | 最近任务失败 |
 | `unknown` | 暂时无法判断状态 |
 
+`completed` 用来提示最近一次任务刚刚完成；如果一段时间内没有新的 Codex 活动，状态会回到 `idle`。
+
 菜单栏默认显示类似：
 
 ```text

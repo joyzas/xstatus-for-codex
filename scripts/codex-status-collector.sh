@@ -8,6 +8,7 @@ PROCESS_FILE="$CODEX_HOME/process_manager/chat_processes.json"
 STATUS_FILE="$CODEX_HOME/status-widget/status.json"
 STATUS_DIR="$(dirname "$STATUS_FILE")"
 WORKSPACE_LABEL="Codex"
+COMPLETED_VISIBLE_SECONDS="${COMPLETED_VISIBLE_SECONDS:-60}"
 
 mkdir -p "$STATUS_DIR"
 
@@ -155,6 +156,7 @@ LIMIT 1;
 fi
 
 age=$((now_ts - latest_ts))
+completed_age=$((now_ts - completed_ts))
 
 if (( failed_ts > completed_ts && failed_ts >= stream_ts )); then
   write_status "failed" "Codex 任务失败" "检测到最近任务出现错误"
@@ -164,10 +166,12 @@ elif (( active_commands > 0 )); then
   write_status "running" "Codex 正在工作" "检测到任务活动" 0.35
 elif (( stream_ts > completed_ts && age <= 45 )); then
   write_status "running" "Codex 正在工作" "检测到任务活动" 0.35
-elif (( completed_ts > 0 && completed_ts >= failed_ts )); then
+elif (( completed_ts > 0 && completed_ts >= failed_ts && completed_age <= COMPLETED_VISIBLE_SECONDS )); then
   write_status "completed" "Codex 任务已完成" "最近一次任务已完成" 1
 elif (( age > 90 )); then
   write_status "idle" "Codex 当前空闲" "最近没有检测到任务活动"
+elif (( completed_ts > 0 && completed_ts >= failed_ts )); then
+  write_status "idle" "Codex 当前空闲" "最近任务已完成，当前没有检测到新活动"
 else
   write_status "running" "Codex 正在工作" "检测到任务活动" 0.35
 fi
